@@ -1,0 +1,34 @@
+{
+  "name": "employeeengagementplatform",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app.js -e,js,yaml,json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikk369/employeeEngagementPlatform.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mikk369/employeeEngagementPlatform/issues"
+  },
+  "homepage": "https://github.com/mikk369/employeeEngagementPlatform#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.7.1",
+    "nodemon": "^2.0.20",
+    "swagger-json": "^2.0.0",
+    "swagger-ui-express": "^4.5.0",
+    "validator": "^13.7.0",
+    "yamljs": "^0.3.0"
+  }
+}
