@@ -1,0 +1,52 @@
+openapi: 3.0.2
+info:
+  title: employeeEngagementPlatform
+  version: 1.0.0
+paths:
+  /users:
+    post:
+      requestBody:
+        description: req body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+            examples:
+              user:
+                value:
+                  email: bob@gmail.com
+                  password: mike12345
+        required: true
+      tags:
+        - Users
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+              examples:
+                User created:
+                  value:
+                    status: success
+                    token: >-
+                      eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzN2ZhMmQxMmFjYTExMjJkNzFhN2M0MCIsImlhdCI6MTY2OTMwOTEzNywiZXhwIjoxNjY5NTY4MzM3fQ.K6ROPFEi9euTkzjXurhuhoSfYGxNEKOIaUh7ZaXh3bA
+                    data:
+                      user:
+                        email: bob@gmail.com
+                        active: true
+                        _id: 637fa2d12aca1122d71a7c40
+                        __v: 0
+          description: User created
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+              examples:
+                user already exists:
+                  value:
+                    error: User already exists
+          description: User already exists
+      summary: Sign up a new user
+      description: User created
