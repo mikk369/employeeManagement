@@ -38,7 +38,7 @@ paths:
                         _id: 637fa2d12aca1122d71a7c40
                         __v: 0
           description: User created
-        '409':
+        '403':
           content:
             application/json:
               schema:
@@ -50,3 +50,119 @@ paths:
           description: User already exists
       summary: Sign up a new user
       description: User created
+  /sessions:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+              properties:
+                name:
+                  type: string
+                password:
+                  type: string
+              example:
+                email: mike@gmail.com
+                password: mike12345
+            examples:
+              user:
+                value:
+                  email: bob@gmail.com
+                  password: mike12345
+        required: true
+      tags:
+        - Users
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+              examples:
+                User added signed in:
+                  value:
+                    status: success
+                    token: >-
+                      eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzN2ZhZDZhNTg2MzA2MGQzM2JjMjk4NyIsImlhdCI6MTY2OTMxMzk3MywiZXhwIjoxNjY5NTczMTczfQ.UlCfzSqy9iBFLi6AELBrelKMDPjKKCTRoOAOTtOvaW4
+                    data:
+                      user:
+                        _id: 637fad6a5863060d33bc2987
+                        email: bob@gmail.com
+                        __v: 0
+          description: 'OK, user logged in'
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+              examples:
+                provide email and password:
+                  value:
+                    error: Please provide email and password!
+          description: Incorrect email or password
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+              examples:
+                user does not exist:
+                  value:
+                    error: User does not exist!
+          description: User does not exist
+      summary: Sign in a user
+components:
+  schemas:
+    hours:
+      title: Root Type for employees
+      description: ''
+      type: object
+      items:
+        $ref: '#/components/schemas/hours'
+      example:
+        userId: 6366eec1385c79a791f80ee9
+        month: November
+        year: 2009
+        days:
+          day: wednesday
+          hours: 9
+    user:
+      title: Root Type for user
+      description: user object
+      type: object
+      properties:
+        status:
+          type: string
+        token:
+          type: string
+        data:
+          type: object
+          properties:
+            user:
+              type: object
+              properties:
+                email:
+                  type: string
+                active:
+                  type: boolean
+                _id:
+                  type: string
+                __v:
+                  format: int32
+                  type: integer
+      example:
+        status: success
+        token: >-
+          eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzN2ZhMmQxMmFjYTExMjJkNzFhN2M0MCIsImlhdCI6MTY2OTMwOTEzNywiZXhwIjoxNjY5NTY4MzM3fQ.K6ROPFEi9euTkzjXurhuhoSfYGxNEKOIaUh7ZaXh3bA
+        data:
+          user:
+            email: bob@gmail.com
+            active: true
+            _id: 637fa2d12aca1122d71a7c40
+            __v: 0
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      name: jwt
+      in: cookie

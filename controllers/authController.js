@@ -36,3 +36,84 @@ exports.signup = async (req, res, next) => {
     return next(error);
   }
 };
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    // check if email and password exist
+    if (!email || !password) {
+      return res.status(400).json({
+        error: 'Please provide email and password',
+      });
+    }
+
+    // check if user exists
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(401).json({
+        message: 'Username or password incorrect',
+      });
+    }
+
+    // check if password is correct
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.status(401).json({
+        message: 'Username or password incorrect',
+      });
+    }
+
+    // if ok, send token
+    const token = signToken(user._id, user.username);
+    // put token into cookie
+    res.cookie('jwt', token, {
+      expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
+      httpOnly: true,
+    });
+
+    // removes password from output
+    user.password = undefined;
+
+    // set token to headers
+    res.set('Authorization', `Bearer ${token}`);
+
+    // sends response
+    return res.status(200).json({
+      message: 'User logged in!',
+      token,
+      user: user,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      error: 'Internal server error',
+    });
+  }
+};
+
+exports.protect = async (req, res, next) => {
+  try {
+    // Check if the JWT token exists in the cookies
+    if (!req.cookies.jwt) {
+      return res.status(401).json({ error: 'You are not logged in! Please log in to get access.' });
+    }
+
+    // Verify the JWT token
+    const token = req.cookies.jwt;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // Check if the user still exists
+    const currentUser = await User.findById(decoded.id);
+    if (!currentUser) {
+      return res
+        .status(401)
+        .json({ error: 'The user belonging to this token does no longer exist.' });
+    }
+
+    // Grant access to the protected route and attach user data to the request
+    req.user = currentUser;
+    next();
+  } catch (error) {
+    return res.status(401).json({ error: 'Invalid token. Please log in again.' });
+  }
+};
