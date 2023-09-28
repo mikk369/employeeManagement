@@ -176,6 +176,48 @@ paths:
       security:
         - cookieAuth: []
       summary: Create new hours
+    get:
+      tags:
+        - Hours
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/hours'
+              examples:
+                hours example:
+                  value:
+                    status: success
+                    results: 3
+                    data:
+                      hours:
+                        - _id: 637f2db1959440147ff828db
+                          userId: 6366eec1385c79a791f80ee9
+                          month: November
+                          year: 2009
+                          days:
+                            - createdAt: '2022-11-24T08:31:00.755Z'
+                              day: wednesday
+                              hours: 9
+                              _id: 637f2db1959440147ff828dc
+                          __v: 0
+          description: list of the hours
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hours'
+              examples:
+                not authorized:
+                  value:
+                    error: You are not logged in! Please log in to get access.
+          description: not authorized
+      security:
+        - cookieAuth: []
+      summary: Returns list of hours
 components:
   schemas:
     hours:
