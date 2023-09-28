@@ -56,3 +56,27 @@ exports.updateHours = async (req, res, next) => {
     });
   }
 };
+
+exports.deleteHour = async (req, res, next) => {
+  try {
+    const deletedHour = await Hours.findByIdAndDelete(req.params.id);
+    if (!deletedHour) {
+      // Document with the given ID was not found
+      res.status(404).json({
+        status: 'fail',
+        message: 'No document with the given ID',
+      });
+    } else {
+      // Successful deletion
+      res.status(204).json({
+        status: 'success',
+        data: null,
+      });
+    }
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+    });
+  }
+};

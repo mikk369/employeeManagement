@@ -313,6 +313,60 @@ paths:
       security:
         - cookieAuth: []
       summary: Update hours
+    delete:
+      tags:
+        - Hours
+      parameters:
+        - example: 636a218362df96c5baaec960
+          name: id
+          description: ID of the hour that will be deleted
+          schema:
+            type: string
+          in: path
+          required: true
+      responses:
+        '204':
+          headers:
+            delete header:
+              schema:
+                $ref: '#/components/schemas/hours'
+              examples:
+                header:
+                  value: " access-control-allow-origin: * \r\n connection: keep-alive \r\n date: Thu,24 Nov 2022 19:51:37 GMT \r\n etag: W/\"20-bff5r/a5MyNNWy9hjn8a8pOLDxA\" \r\n keep-alive: timeout=5 \r\n x-powered-by: Express "
+          description: Retruns status code 204 with no body
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hours'
+              examples:
+                not authorized:
+                  value:
+                    error: You are not logged in! Please log in to get access.
+          description: not authorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hours'
+              examples:
+                hours not found:
+                  value:
+                    error: no document with given id
+          description: hours with given ID not found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hours'
+              examples:
+                internal server error:
+                  value:
+                    error: Internal Server Error
+          description: Internal Server Error
+      security:
+        - cookieAuth: []
+      summary: Deletes hours from db
 components:
   schemas:
     hours:
