@@ -218,6 +218,101 @@ paths:
       security:
         - cookieAuth: []
       summary: Returns list of hours
+  '/hours/{id}':
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: object
+                month:
+                  type: string
+                year:
+                  type: number
+                days:
+                  type: object
+                day:
+                  type: object
+            example:
+              _id: 636a228c62df96c5baaec969
+              userId: 6367edbf8901c69da661f0b9
+              month: March
+              year: 2011
+              days:
+                createdAt: '2022-11-08T09:23:38.336Z'
+                day: 25
+                hours: 7
+                _id: 636a228c62df96c5baaec96a
+        required: true
+      tags:
+        - Hours
+      parameters:
+        - example: 636a228c62df96c5baaec96a
+          name: id
+          description: ID of the hour
+          schema:
+            type: string
+          in: path
+          required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hours'
+              examples:
+                hours:
+                  value:
+                    _id: 636a228c62df96c5baaec969
+                    userId: 6367edbf8901c69da661f0b9
+                    month: March
+                    year: 2011
+                    days:
+                      createdAt: '2022-11-08T09:23:38.336Z'
+                      day: 25
+                      hours: 7
+                      _id: 636a228c62df96c5baaec96a
+          description: patches hours by id
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hours'
+              examples:
+                bad request:
+                  value:
+                    message: >-
+                      requests body does not contain required fields or required fields
+                      are invalid format
+          description: >-
+            if requests body does not contain required fields or required fields are invalid
+            format
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hours'
+              examples:
+                not athorized:
+                  value:
+                    error: You are not logged in! Please log in to get access.
+          description: not autorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hours'
+              examples:
+                not found:
+                  value:
+                    error: No document with the given ID
+          description: Document not found
+      security:
+        - cookieAuth: []
+      summary: Update hours
 components:
   schemas:
     hours:

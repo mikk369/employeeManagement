@@ -8,4 +8,6 @@ router
   .post(authController.protect, hoursApi.createHours)
   .get(authController.protect, hoursApi.getAllhours);
 
+router.route('/:id').patch(authController.protect, hoursApi.updateHours);
+
 module.exports = router;
