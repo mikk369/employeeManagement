@@ -112,6 +112,70 @@ paths:
                     error: User does not exist!
           description: User does not exist
       summary: Sign in a user
+  /hours:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/hours'
+        required: true
+      tags:
+        - Hours
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hours'
+              examples:
+                hours added:
+                  value:
+                    status: 200
+                    hour:
+                      userId: 6366eec1385c79a791f80ee9
+                      month: November
+                      year: 2009
+                      days:
+                        - createdAt: '2022-11-24T18:53:27.475Z'
+                          day: wednesday
+                          hours: 9
+                          _id: 637fbe59390ad5ac854b6958
+                      _id: 637fbe59390ad5ac854b6957
+                      __v: 0
+          description: hours added
+        '400':
+          headers:
+            post header:
+              schema:
+                $ref: '#/components/schemas/hours'
+              examples:
+                bad request post header:
+                  value: "access-control-allow-origin: * \r\n connection: keep-alive \r\n content-length: 53 \r\n content-type: application/json; charset=utf-8 \r\n date: Thu,24 Nov 2022 18:58:58 GMT \r\n etag: W/\"35-q2fHAoP/SAtZA4gjE6q54BdESFc\" \r\n keep-alive: timeout=5 \r\n x-powered-by: Express "
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hours'
+              examples:
+                required fields are not filled:
+                  value:
+                    error: required fields are not filled or in invalid format
+          description: >-
+            if requests body does not contain required fields or required fields are invalid
+            format
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hours'
+              examples:
+                not autorized:
+                  value:
+                    error: You are not logged in! Please log in to get access.
+          description: not authorized
+      security:
+        - cookieAuth: []
+      summary: Create new hours
 components:
   schemas:
     hours:
